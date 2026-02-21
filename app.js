@@ -5,6 +5,8 @@ const Listing=require("./models/listing.js");
 const path=require("path");
 const methodOverride=require("method-override")
 const ejsMate=require("ejs-mate");
+const wrapAsync=require("./utils/wrapAsync.js");
+const ExpressError=require("./utils/ExpressError.js");
 
 const Mongo_URL="mongodb://127.0.0.1:27017/wanderLust"
 
@@ -40,12 +42,13 @@ app.get("/listings/new",(req,res)=>{
     res.render("listings/new.ejs");
 });
 
-app.post("/listings", async(req,res)=>{
+//create Route
+app.post("/listings", wrapAsync(async(req,res)=>{
     const newListing=new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings")
 
-});
+}));
 
 
 //show individual listing
@@ -76,7 +79,14 @@ app.delete("/listings/:id", async(req,res)=>{
     res.redirect("/listings");
 });
 
+app.use((req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!!!"));
+});
 
+app.use((err, req, res, next)=>{
+    let{statusCode, message}=err;
+    res.status(statusCode).send(message)
+});
 app.listen(8080, ()=>{
     console.log("Server is listening to port 8080");
 });
