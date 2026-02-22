@@ -32,10 +32,10 @@ app.get("/", (req,res)=>{
 });
 
 
-app.get("/listings", async (req,res)=>{
+app.get("/listings", wrapAsync(async (req,res)=>{
     const allListings=await Listing.find({});
     res.render("listings/index.ejs", {allListings})
-});
+}));
 
 //New Listing
 app.get("/listings/new",(req,res)=>{
@@ -44,6 +44,9 @@ app.get("/listings/new",(req,res)=>{
 
 //create Route
 app.post("/listings", wrapAsync(async(req,res)=>{
+    if(!req.body.listing){
+        throw new ExpressError (400, "Send Valid Data For Listing");
+    }
     const newListing=new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings")
@@ -52,40 +55,43 @@ app.post("/listings", wrapAsync(async(req,res)=>{
 
 
 //show individual listing
-app.get("/listings/:id", async(req,res)=>{
+app.get("/listings/:id", wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing= await Listing.findById(id);
     res.render("listings/show.ejs", {listing});
-});
+}));
 
 //edit 
-app.get("/listings/:id/edit", async (req,res)=>{
+app.get("/listings/:id/edit", wrapAsync(async (req,res)=>{
     let{id}=req.params;
     const listing= await Listing.findById(id);
     res.render("listings/edit.ejs", {listing});
-});
+}));
 //edit update route
-app.put("/listings/:id", async(req, res)=>{
+app.put("/listings/:id", wrapAsync(async(req, res)=>{
+     if(!req.body.listing){
+        throw new ExpressError (400, "Send Valid Data For Listing");
+    }
     let {id}= req.params;
-
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
     res.redirect(`/listings/${id}`); 
-});
+}));
 
 //delete route
-app.delete("/listings/:id", async(req,res)=>{
+app.delete("/listings/:id", wrapAsync(async(req,res)=>{
     let{id}=req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
-});
+}));
 
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!!!"));
 });
 
 app.use((err, req, res, next)=>{
-    let{statusCode, message}=err;
-    res.status(statusCode).send(message)
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Something went wrong";
+    res.status(statusCode).render("listings/error.ejs", {message})
 });
 app.listen(8080, ()=>{
     console.log("Server is listening to port 8080");
