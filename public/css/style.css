@@ -91,6 +91,7 @@ body{
 
 .show-img{
     height:30vh;
+    border:none !important;
 }
 .btns{
     display:flex;
