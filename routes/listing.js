@@ -2,19 +2,8 @@ const express=require("express");
 const router=express.Router();
 const Listing=require("../models/listing.js");
 const wrapAsync=require("../utils/wrapAsync.js");
-const {listingSchema}=require("../schema.js");
-const ExpressError=require("../utils/ExpressError.js");
-const {isLoggedin}=require("../middleware.js");
+const {isLoggedin, isOwner, validateListing}=require("../middleware.js");
 
-
-const validateListing=(req,res,next)=>{
-    let {error}=listingSchema.validate(req.body);
-    if(error){
-        throw new ExpressError(400, error)
-    }else{
-        next();
-    }
-};
 
 router.get("/", wrapAsync(async (req,res)=>{
     const allListings=await Listing.find({});
@@ -48,7 +37,7 @@ router.get("/:id", wrapAsync(async(req,res)=>{
 }));
 
 //edit 
-router.get("/:id/edit", isLoggedin, wrapAsync(async (req,res)=>{
+router.get("/:id/edit", isLoggedin, isOwner, wrapAsync(async (req,res)=>{
     let{id}=req.params;
     const listing= await Listing.findById(id);
      if(!listing){
@@ -58,7 +47,7 @@ router.get("/:id/edit", isLoggedin, wrapAsync(async (req,res)=>{
     res.render("listings/edit.ejs", {listing});
 }));
 //edit update route
-router.put("/:id",isLoggedin, validateListing, wrapAsync(async(req, res)=>{
+router.put("/:id",isLoggedin, isOwner, validateListing, wrapAsync(async(req, res)=>{
     let {id}= req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
     req.flash("success" , "Listing Updated");
@@ -66,7 +55,7 @@ router.put("/:id",isLoggedin, validateListing, wrapAsync(async(req, res)=>{
 }));
 
 //delete route
-router.delete("/:id", isLoggedin, wrapAsync(async(req,res)=>{
+router.delete("/:id", isLoggedin, isOwner, wrapAsync(async(req,res)=>{
     let{id}=req.params;
     await Listing.findByIdAndDelete(id);
     req.flash("del" , "Listing Deleted")
