@@ -8,12 +8,11 @@
         </div>
     </div>
     <div class="card-body">
-        <p class="card-text offset-2 ">
-                <%=listing.description%><br>
-                $<%=listing.price.toLocaleString("en-US")%><br>
-                <%=listing.location%><br>
-                <%=listing.country%>
-        </p>
+        <p class="card-text offset-2 ">Owned by:<i><b> <%=listing.owner.username%></b></i></p>
+        <p class="card-text offset-2 "><%=listing.description%></p>        
+        <p class="card-text offset-2 ">$<%=listing.price.toLocaleString("en-US")%></p>       
+        <p class="card-text offset-2 "><%=listing.location%></p>
+        <p class="card-text offset-2 "><%=listing.country%></p>  
     </div>
 
 
