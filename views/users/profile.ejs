@@ -1,0 +1,29 @@
+<%layout("/layouts/boilerplate")%>
+<div class="profile">
+<%if(currUser){%>
+  <div class="card ">
+  <img src="/images/profile.jpg" class="card-img-top prof-img" alt="Profile">
+  <div class="card-body">
+    <hr>
+    <p class="card-text"><b>Name:</b><%=currUser.username%></p>
+    <p class="card-text"><b>Email:</b><%=currUser.email%></p>
+  </div>
+</div>
+<%}else{%>
+  <div class="card">
+  <img src="/images/profile.jpg" class="card-img-top prof-img" alt="Profile">
+  <div class="card-body">
+    <hr>
+    <p class="card-text"><b>Name:</B>Anonymous</p>
+    <p class="card-text"><b>Email:</b>anonymous@gmail.com</p>
+    <form action="/login" method="GET">
+    <button type="submit" class="btn btn-dark mb-3">Login</button>
+    </form>
+    <form action="/signup" method="GET">
+   <button type="submit" class="btn btn-dark">SignUp</button>
+   </form>
+  </div>
+</div>
+<%}%>
+</div>
+    

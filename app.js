@@ -50,10 +50,6 @@ const sessionOptions={
     },
 };
 
-app.get("/", (req,res)=>{
-    res.send("Working....")
-});
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -68,6 +64,7 @@ app.use((req, res, next)=>{
     res.locals.del=req.flash("del");
     res.locals.error=req.flash("error");
     res.locals.currUser=req.user;
+    res.locals.MAP_TOKEN = process.env.MAP_TOKEN;
     next();
 });
 

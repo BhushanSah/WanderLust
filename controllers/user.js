@@ -43,3 +43,7 @@ module.exports.logout=(req,res, next)=>{
     })
 };
 
+module.exports.getProfile=(req,res)=>{
+    res.render("users/profile.ejs")
+};
+

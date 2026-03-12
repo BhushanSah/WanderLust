@@ -100,3 +100,33 @@ body{
 .submit-btn{
     background-color:#1877F2 !important;
 }
+/* profile */
+.profile{
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile .card{
+  background: #F2F7FF;
+  border: 1px solid black; 
+  width:18rem;
+  border-radius: 15px !important;  
+  overflow: hidden;     
+}
+
+.prof-img{
+
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  object-position: 50% 45%;  /* play with 25%–45% */
+  border-radius: 50%;
+  display: block;
+  margin: 16px auto 0;
+}
+/* maps */
+#map {
+    height:400px;
+    width:80vh;
+}
