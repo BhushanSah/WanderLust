@@ -5,11 +5,11 @@ module.exports.listingSchema=Joi.object({
         title: Joi.string().required(),
         description: Joi.string().required(),
         location :Joi.string().required(),
-        country: Joi.string().required(),
         price: Joi.string().required().min(0),
         image: Joi.object({
           url: Joi.string().allow("", null)
-        }).optional()
+        }).optional(),
+        category: Joi.string().valid("Trending","Rooms","IconicCities","Mountain","Castles","Arctic","House").required()
 
     }).required()
 });

@@ -11,6 +11,11 @@ module.exports.index=async (req,res)=>{
 module.exports.renderNewForm=(req,res)=>{
     res.render("listings/new.ejs");
 };
+module.exports.category=async(req,res)=>{
+    const {cat}=req.params;
+    const allListings=await Listing.find({category: cat});
+    res.render("listings/index.ejs", {allListings})
+};
 
 module.exports.createPost=async(req,res,next)=>{
     let response=await geocodingClient.forwardGeocode({

@@ -30,8 +30,19 @@
         </div>
        </div>
         <div class="mb-3">
-            <label  for="country" class="form-label">Country</label>
-            <input  name="listing[country]" value="<%=listing.country%>" type="text" class="form-control" required>
+        <label for="category" class="form-label">Category</label>
+            <select id="category" name="listing[category]" class="form-select" required>
+            <option value="" disabled <%= !listing.category ? "selected" : "" %>>Select a category</option>
+
+            <option value="Trending" <%= listing.category === "Trending" ? "selected" : "" %>>Trending</option>
+            <option value="Rooms" <%= listing.category === "Rooms" ? "selected" : "" %>>Rooms</option>
+            <option value="IconicCities" <%= listing.category === "IconicCities" ? "selected" : "" %>>Iconic Cities</option>
+            <option value="Mountain" <%= listing.category === "Mountain" ? "selected" : "" %>>Mountain</option>
+            <option value="Castles" <%= listing.category === "Castles" ? "selected" : "" %>>Castles</option>
+            <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
+            <option value="House" <%= listing.category === "House" ? "selected" : "" %>>House</option>
+            </select>
+        <div class="invalid-feedback">Please choose a category.</div>
         </div>
         <button class="btn btn-dark add-btn mt-3">Edit</button>
     </form>
