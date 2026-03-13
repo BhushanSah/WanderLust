@@ -13,6 +13,8 @@ router.route("/")
 .post(isLoggedin,  validateListing, upload.single("listing[image]"),
  wrapAsync(listingController.createPost));
 
+router.get("/search", wrapAsync(listingController.Search))
+
 //New Listing
 router.get("/new",isLoggedin, listingController.renderNewForm);
 router.get("/category/:cat", wrapAsync(listingController.category));
