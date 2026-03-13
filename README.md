@@ -1,63 +1,80 @@
-# WanderLust
+# WanderLust 🌍🧭
 
-WanderLust is a full stack travel listing web application where users can create, view, edit, and delete listings, and also add or remove reviews for each listing. This project was built to practice backend development, RESTful routing, database relationships, server-side validation, and error handling.
+WanderLust is a full-stack travel listing web app where users can create, browse, filter, and search travel listings, upload photos, and leave reviews. I built this project to practice RESTful routing, authentication, database relationships, server-side validation, file uploads, and map/geocoding features.
 
 ## Features
 
-* Create, read, update, and delete travel listings
-* Add and delete reviews for listings
-* Server-side validation using Joi
-* MongoDB database integration using Mongoose
-* Review-to-listing relationship using Mongoose refs and `populate()`
-* Async error handling with custom middleware (`wrapAsync`)
-* Custom error page rendering with Express error middleware
-* Method override support for PUT and DELETE routes from HTML forms
+### Listings
+- Full CRUD for travel listings (create, view, edit, delete) 
+- Upload listing images using Multer + Cloudinary storage 
+- Each listing stores:
+  - `owner` (User reference)
+  - `category` (enum)
+  - `geometry` (GeoJSON Point for mapping) 
+
+### Reviews
+- Add and delete reviews on listings 
+- Reviews store an `author` (User reference) and are populated when viewing a listing
+- Cascade delete: when a listing is deleted, its reviews are deleted too 
+
+### Categories + Search
+- Category pages like `/listings/category/Arctic` (and others) 
+- Search route `/listings/search?q=...` that filters listings by title/location/country/category 
+
+### Authentication + Authorization
+- Signup/login/logout using Passport (local strategy) 
+- Flash messages for success/error feedback 
+- Route protection (must be logged in to create listings/reviews) 
+- Ownership checks:
+  - Only the listing owner can edit/delete the listing 
+  - Only the review author can delete their review 
+
+### Maps
+- Uses Mapbox Geocoding to create a GeoJSON `geometry` point from the listing location when creating a listing 
+- Mapbox token is passed to EJS views via `res.locals` 
+
+---
 
 ## Tech Stack
 
-### Backend
+**Backend**
+- Node.js, Express 
+- MongoDB + Mongoose  
+- Passport + express-session (auth + sessions)   
+- Joi (server-side validation) 
 
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* Joi
+**Frontend**
+- EJS templating + ejs-mate layouts   
+- Bootstrap + custom CSS 
 
-### Frontend / Templating
+**Uploads / Maps**
+- Multer + Cloudinary storage  
+- Mapbox SDK (Geocoding) 
 
-* EJS
-* HTML/CSS
-* Bootstrap
+---
 
-## Key Concepts I Practiced
+## Project Structure
 
-* **Nested routes** (reviews under listings)
-* **Mongoose relationships** using ObjectId references
-* **`populate()`** to load review details on listing pages
-* **Server-side validation** to prevent invalid form submissions
-* **Error handling middleware** in Express
-* **Cascade delete logic** for removing related reviews when a listing is deleted
+- `app.js` – Express setup, sessions, Passport, flash, routers, error handling 
+- `models/` – Mongoose models (Listing, Review, User) 
+- `routes/` – Listing, Review, and User routes  
+- `controllers/` – Route handlers (listings, reviews, users) 
+- `middleware.js` – auth guards + validation + ownership checks
+- `schema.js` – Joi validation schemas 
+- `cloudConfig.js` – Cloudinary + Multer storage config   
+- `views/` – EJS pages & partials
 
-## Validation and Error Handling
+---
 
-This project uses **Joi** for server-side validation of listing and review data. Even if the frontend form uses HTML validation (`required`), server-side validation is still necessary because users can bypass browser validation.
+## Environment Variables
 
-Async route errors are handled using a reusable helper:
+Create a `.env` file in the project root and add:
 
-* `wrapAsync(fn)` catches rejected promises and forwards errors to Express error middleware
-
-A global error handler renders a custom error page and prevents the app from crashing on unexpected issues.
-
-
-## Future Improvements (Ideas)
-
-* User authentication and authorization
-* Only logged-in users can create/edit/delete listings and reviews
-* Image upload support (Cloudinary / Multer)
-* Flash messages for success/error feedback
-* Search and filter listings
-* Map integration for locations
-* Deployment (Render / Railway / Vercel + MongoDB Atlas)
+```env
+MAP_TOKEN=your_mapbox_token
+CLOUD_NAME=your_cloudinary_cloud_name
+CLOUD_API_KEY=your_cloudinary_api_key
+CLOUD_API_SECRET=your_cloudinary_api_secret
 
 ## Author
 
