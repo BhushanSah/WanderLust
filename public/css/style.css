@@ -130,6 +130,12 @@ body{
     height:400px;
     width:80vh;
 }
+@media (max-width: 768px) {
+  #map {
+    height: 250px;
+    width: 100%;
+  }
+}
 
 .btn-search{
 background-color: #fe424d !important;
